@@ -21,11 +21,8 @@ public class Card {
         return this.suite;
     }
 
-    public int getNumberValue(Card card) {
-        return Arrays.asList(values).indexOf(card.getValue()) + 1;
+    public int getNumberValue() {
+        return Arrays.asList(values).indexOf(value) + 1;
     }
 
-    public int getSuiteValue(Card card) {
-        return Arrays.asList(suites).indexOf(card.getSuite()) + 1;
-    }
 }

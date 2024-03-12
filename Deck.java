@@ -20,7 +20,7 @@ public class Deck {
     }
 
     public void draw(ArrayList<Card> hand) {
-        int deckNumber = rand.nextInt(52);
+        int deckNumber = rand.nextInt(51);
         hand.add(deck.get(deckNumber));
         deck.remove(deckNumber);
     }
