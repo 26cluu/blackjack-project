@@ -1,4 +1,3 @@
-import java.util.*;
 public class Card {
     
     String suite, value;
@@ -22,7 +21,16 @@ public class Card {
     }
 
     public int getNumberValue() {
-        return Arrays.asList(values).indexOf(value) + 1;
+        if (value.equals("A")) {
+            return 1;
+        }
+        if (value.equals("J") || value.equals("Q") || value.equals("K")) {
+            return 10;
+        }
+        else {
+            Integer x = Integer.valueOf(value);
+            return x;
+        }
     }
 
 }
