@@ -1,8 +1,9 @@
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Deck deck = new Deck();
         boolean game_over = false;
         Scanner sc = new Scanner(System.in);
@@ -12,47 +13,86 @@ public class Main {
         ArrayList<Card> dealer_hand = new ArrayList<Card>();
 
         while (!game_over) {
-            System.out.println("Player:");
+            String playerMessage1 = "Player:";
+            printWithDelay(playerMessage1);
+
             deck.draw(player_hand);
             deck.draw(player_hand);
             showHand(player_hand);
-            System.out.println("hand value: " + handValue(player_hand));
 
-            System.out.println("\nDealer:");
+            String playerMessage2 = "hand value: " + handValue(player_hand);
+            printWithDelay(playerMessage2);
+
+            String firstDealerMessage1 = "\nDealer:";
+            printWithDelay(firstDealerMessage1);
+            
             deck.draw(dealer_hand);
             showHand(dealer_hand);
-            System.out.println("hidden card");
-            System.out.println("hand value: " + handValue(dealer_hand));
+
+            String firstDealerMessage2 = "hidden card";
+            printWithDelay(firstDealerMessage2);
+
+            String firstDealerMessage3 = "hand value: " + handValue(dealer_hand);
+            printWithDelay(firstDealerMessage3);
 
             
             while (player_loop == true) {
-                System.out.println("Would you like to hit or stay");
+                String hitOrStayMessage = "Would you like to hit or stay";
+                printWithDelay(hitOrStayMessage);
+
                 String response = sc.nextLine();
+
                 System.out.println();
 
                 if (response.equals("hit")) {
-                    deck.draw(player_hand);
-                    System.out.println("player: ");
-                    showHand(player_hand);
-                    System.out.println(handValue(player_hand));
+                    clearScreen();
+                    
 
                     if (bust_check(player_hand)) {
-                        System.out.println("you went over 21, you lose");
+                        clearScreen();
+                        String bustMessage1 = "you went over 21, you lose";
+                        printWithDelay(bustMessage1);
+                        
+                        Thread.sleep(200);
+                        printWithDelay(firstDealerMessage3);
+
                         game_over = true;
                         break;
                     }
+
+                    deck.draw(player_hand);
+
+                    String hitMessage1 = "player: ";
+                    printWithDelay(hitMessage1);
+
+                    showHand(player_hand);
+
+                    
+                    String hitMessage2 = String.valueOf((handValue(player_hand)));
+                    printWithDelay(hitMessage2);
+
+    
+
+                    printWithDelay(firstDealerMessage1);
+                    printWithDelay(firstDealerMessage2);
+                    printWithDelay(firstDealerMessage3);
+
                 }
 
                 if (response.equals("stay")) {
                     player_loop = false;
                 }
             }
+            clearScreen();
 
             dealerDraw(deck, dealer_hand);
 
             game_over = true;
 
         }
+        clearScreen();
+
+        Thread.sleep(150);
 
         String res = win_check(player_hand, dealer_hand);
         System.out.println("Final Hands:");
@@ -137,6 +177,21 @@ public class Main {
         }
 
         return "";
+    }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }  
+
+
+    //print method for typing effect in console
+    public static void printWithDelay(String x) throws InterruptedException{
+        for (int count=0; count < x.length(); count++){
+            System.out.print(x.charAt(count));
+            TimeUnit.MILLISECONDS.sleep(40);
+        }
+        System.out.println();
     }
 
 }
