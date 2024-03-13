@@ -121,7 +121,7 @@ public class Main {
 
     public static void showHand(ArrayList<Card> hand) {
         for (Card card : hand) {
-            System.out.println(card.getValue() + "(" + card.getSuite() + ")");
+            System.out.println(card.getValue() + "" + card.getSuite() + "");
         }
     }
 

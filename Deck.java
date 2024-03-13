@@ -5,7 +5,7 @@ public class Deck {
     Random rand = new Random();
 
     //to be changed to symbols later on
-    String[] suites = {"diamonds", "cloves", "hearts", "spades"};
+    String[] suites = {"♦️", "♣️", "♥️", "♠️"};
     //numbers and faces
     String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     ArrayList<Card> deck = new ArrayList<Card>();
