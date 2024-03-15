@@ -1,18 +1,25 @@
+//by Cody Luu and Blake Almon
+
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        //decks and trackers
         Deck deck = new Deck();
         boolean game_over = false;
         Scanner sc = new Scanner(System.in);
         boolean player_loop = true;
 
+
+        //hands
         ArrayList<Card> player_hand = new ArrayList<Card>();
         ArrayList<Card> dealer_hand = new ArrayList<Card>();
 
+        //player turn
         while (!game_over) {
+            //starting phase with card reveals
             String playerMessage1 = "Player:";
             printWithDelay(playerMessage1);
 
@@ -35,7 +42,7 @@ public class Main {
             String firstDealerMessage3 = "hand value: " + handValue(dealer_hand);
             printWithDelay(firstDealerMessage3);
 
-            
+            //hit or stay phase for player
             while (player_loop == true) {
                 String hitOrStayMessage = "Would you like to hit or stay";
                 printWithDelay(hitOrStayMessage);
@@ -47,7 +54,7 @@ public class Main {
                 if (response.equals("hit")) {
                     clearScreen();
                     
-
+                    //checks for bust
                     if (bust_check(player_hand)) {
                         clearScreen();
                         String bustMessage1 = "you went over 21, you lose";
@@ -60,8 +67,10 @@ public class Main {
                         break;
                     }
 
+                    //draws card
                     deck.draw(player_hand);
 
+                    //shows hit messages
                     String hitMessage1 = "player: ";
                     printWithDelay(hitMessage1);
 
@@ -79,14 +88,18 @@ public class Main {
 
                 }
 
+                //ends hit phase once player chooses to stay
                 if (response.equals("stay")) {
                     player_loop = false;
                 }
             }
             clearScreen();
 
+            //dealer turn initiates
             dealerDraw(deck, dealer_hand);
 
+
+            //ends player turn
             game_over = true;
 
         }
@@ -94,7 +107,11 @@ public class Main {
 
         Thread.sleep(150);
 
+
+        //checks who won
         String res = win_check(player_hand, dealer_hand);
+
+        //shows final hands and values
         System.out.println("Final Hands:");
         System.out.println("\n Dealer: ");
         showHand(dealer_hand);
@@ -104,6 +121,7 @@ public class Main {
         showHand(player_hand);
         System.out.println("Hand value: " + handValue(player_hand));
 
+        //different statements depending on who won
         switch(res) {
             case "dealer":
                 System.out.println("Sorry, the dealer wins this time");
@@ -119,20 +137,36 @@ public class Main {
         sc.close();
     }
 
+    //method to print out cards in given hand
     public static void showHand(ArrayList<Card> hand) {
         for (Card card : hand) {
-            System.out.println(card.getValue() + "" + card.getSuite() + "");
+            System.out.println(card.getValue() + " (" + card.getSuite() + ")");
         }
     }
 
+
+    //calculates the value of a hand
     public static int handValue(ArrayList<Card> hand) {
+        //tracks aces in hand and total hand value
         int total = 0;
+        int ace = 0;
         for (Card card : hand) {
             total += card.getNumberValue();
+            if (card.getValue().equals("A")) {
+                ace++;
+            }
         }
+        //uses ace as 11 default but changes it to 1 if the hand value goes over 21
+        //while loop incase hand needs to change multiple aces
+        while ((total > 21) && (ace > 0)) {
+            total -= 10;
+            ace --;
+        }
+
         return total;
     }
 
+    //draws for dealer until < 17 or busts
     public static void dealerDraw(Deck deck, ArrayList<Card> hand) {
         showHand(hand);
         while (handValue(hand) < 17) {
@@ -146,6 +180,7 @@ public class Main {
         showHand(hand);
     }
 
+    //checks if a hand is over 21
     public static boolean bust_check(ArrayList<Card> hand) {
         int total = handValue(hand);
         if (total > 21) {
@@ -154,6 +189,7 @@ public class Main {
         return false;
     }
 
+    //returns who won
     public static String win_check(ArrayList<Card> player, ArrayList<Card> dealer) {
         if (bust_check(player)) {
             System.out.println("player busted");
@@ -179,6 +215,7 @@ public class Main {
         return "";
     }
 
+    //clears the screen
     public static void clearScreen() {  
         System.out.print("\033[H\033[2J");  
         System.out.flush();  
